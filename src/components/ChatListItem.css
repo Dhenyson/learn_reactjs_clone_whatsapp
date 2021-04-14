@@ -40,6 +40,11 @@
 .chatListItem--name{
     font-size: 17px;
     color: #dfe0e1;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0;
 }
 .chatListItem--date{
     font-size: 12px;
