@@ -3,7 +3,7 @@
 }
 
 body{
-  background-color: #d2dbdc;
+  background-color: #2a2f32;
   margin: 0;
   font-family: 'Segoe UI', Helvetica Neue, Helvetica, Lucida Grande, Arial;
 }
@@ -11,7 +11,7 @@ body{
 .app-window{
   display: flex;
   height: 100vh;
-  background-color: #ededed;
+  background-color: #2a2f32;
 }
 
 .sidebar{
@@ -19,7 +19,7 @@ body{
   max-width: 415px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #ddd;
+  border-right: 0.5px solid #b1b3b5;
 }
 
 header{
@@ -47,6 +47,28 @@ header{
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+.search{
+  background-color: #131c21;
+  border-bottom: 1px solid #b1b3b5;
+  padding: 5px 15px;
+}
+.search--input{
+  background-color: #434749;
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+.search--input input{
+  flex: 1;
+  border: 0;
+  outline: 0; /**/
+  background-color: transparent;
+  margin-left: 10px;
+  color: #b1b3b5;
 }
 
 .contentarea{
