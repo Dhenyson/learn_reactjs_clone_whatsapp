@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
 }
 
 body{
@@ -20,6 +21,7 @@ body{
   display: flex;
   flex-direction: column;
   border-right: 0.5px solid #b1b3b5;
+  background-color: #131c21;
 }
 
 header{
@@ -28,6 +30,7 @@ header{
   justify-content: space-between;
   align-items: center;
   padding: 0 15px;
+  background-color: #2a2f32;
 }
 
 .header--avatar{
@@ -51,7 +54,7 @@ header{
 
 .search{
   background-color: #131c21;
-  border-bottom: 1px solid #b1b3b5;
+  border-bottom: 1px solid #5e6163;
   padding: 5px 15px;
 }
 .search--input{
@@ -69,6 +72,19 @@ header{
   background-color: transparent;
   margin-left: 10px;
   color: #b1b3b5;
+}
+
+.chatlist{
+  flex: 1;
+  
+  overflow: auto;
+}
+.chatlist::-webkit-scrollbar{
+  width: 6px;
+  height: 6px;
+}
+.chatlist::-webkit-scrollbar-thumb{
+  background-color: rgba(0,0,0, 0.2);
 }
 
 .contentarea{
