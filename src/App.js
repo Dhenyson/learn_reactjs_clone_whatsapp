@@ -1,17 +1,26 @@
 import './App.css';
 
-function App() {
+export default () => {
   return (
-    <div className="app.window">
+    <div className="app-window">
       <div className="sidebar">
-        ...
+        
+        <header>
+          ...
+        </header>
+
+        <div className="search">
+          ...
+        </div>
+
+        <div className="chatList">
+          ...
+        </div>
+
       </div>
       <div className="contentarea">
         ...
       </div>
-
     </div>
   );
 }
-
-export default App;
