@@ -1,8 +1,8 @@
 import './ChatListItem.css'
 
-export default ({onClick}) => {
+export default ({onClick, active}) => {
     return (
-        <div className="chatListItem" onClick={onClick}>
+        <div className={`chatListItem ${active?'active':""}`} onClick={onClick}>
             <img className="chatListItem--avatar" src="https://www.w3schools.com/howto/img_avatar2.png" alt="" />
             <div className="chatListItem--lines">
                 <div className="chatListItem--line">
