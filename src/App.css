@@ -18,6 +18,7 @@ body{
 .sidebar{
   width: 35%;
   max-width: 415px;
+  min-width: 260px;
   display: flex;
   flex-direction: column;
   border-right: 0.5px solid #b1b3b5;
@@ -76,7 +77,6 @@ header{
 
 .chatlist{
   flex: 1;
-  
   overflow: auto;
 }
 .chatlist::-webkit-scrollbar{
@@ -88,5 +88,5 @@ header{
 }
 
 .contentarea{
-
+  width: 100%;
 }
