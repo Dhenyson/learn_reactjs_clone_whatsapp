@@ -40,6 +40,8 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    overflow: hidden;
+    transition: all ease 0.3s;
 }
 
 .chatWindow--body{
@@ -68,13 +70,28 @@
     height: 40px;
     border: 0;
     outline: 0;
-    background-color: #fff;
+    background-color: #484d4e;
     border-radius: 20px;
     font-size: 15px;
-    color: #4a4a4a;
+    color: #c0c0c0;
     padding-left: 15px;
 }
 .chatWindow--pos{
     display: flex;
     margin: 0 15px;
+}
+.chatWindow--emojiarea{
+    height: 200px;
+    overflow-y: hidden;
+    transition: all ease 0.3s;
+}
+
+aside.emoji-picker-react{
+    width: auto;
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+.emoji-picker-react .emoji-group:before{
+    background: none;
 }
