@@ -1,5 +1,5 @@
 import EmojiPicker from 'emoji-picker-react'
-import {useState} from 'react'
+import {useState, useEffect, useRef} from 'react'
 
 import './ChatWindow.css'
 import SearchIcon from '@material-ui/icons/Search';
@@ -11,13 +11,49 @@ import SendIcon from '@material-ui/icons/Send';
 import MicIcon from '@material-ui/icons/Mic';
 
 import colors from '../colors'
+import MessageItem from './MessageItem'
 
-export default () => {
+export default ({user}) => {
+
+    const body = useRef();
 
     const [emojiOpen, setEmojiOpen] = useState(false)
+    const [text, setText] = useState('')
+    const [list, setList] = useState([
+        {author: 123, body:'Testando mensagem', date:"18:30"},
+        {author: 1234, body:'eu', date:"18:45"},
+        {author: 1234, body:'aqui', date:"18:48"},
+        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
+        {author: 123, body:'Testando mensagem', date:"18:30"},
+        {author: 1234, body:'eu', date:"18:45"},
+        {author: 1234, body:'aqui', date:"18:48"},
+        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
+        {author: 123, body:'Testando mensagem', date:"18:30"},
+        {author: 1234, body:'eu', date:"18:45"},
+        {author: 1234, body:'aqui', date:"18:48"},
+        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
+        {author: 123, body:'Testando mensagem', date:"18:30"},
+        {author: 1234, body:'eu', date:"18:45"},
+        {author: 1234, body:'aqui', date:"18:48"},
+        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
+        {author: 123, body:'Testando mensagem', date:"18:30"},
+        {author: 1234, body:'eu', date:"18:45"},
+        {author: 1234, body:'aqui', date:"18:48"},
+        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
+        {author: 123, body:'Testando mensagem', date:"18:30"},
+        {author: 1234, body:'eu', date:"18:45"},
+        {author: 1234, body:'aqui', date:"18:48"},
+        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
+    ])
 
-    const handleEmojiClick = () => {
+    useEffect(()=>{
+        if(body.current.scrollHeight > body.current.offsetHeight){
+            body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight
+        }
+    },[list])
 
+    const handleEmojiClick = (e, emojiObject) => {
+        setText( text + emojiObject.emoji)
     }
 
     const handleOpenEmoji = () => {
@@ -26,6 +62,14 @@ export default () => {
 
     const handleCloseEmoji = () => {
         setEmojiOpen(false)
+    }
+
+    const handleMicClick = () => {
+
+    }
+
+    const handleSendClick = () => {
+
     }
 
     return (
@@ -52,8 +96,15 @@ export default () => {
                 </div>
 
             </div>
-            <div className="chatWindow--body">
 
+            <div ref={body} className="chatWindow--body">
+                {list.map((item, key) => (
+                    <MessageItem
+                        key={key}
+                        data={item}
+                        user={user}
+                    />
+                ))}
             </div>
 
             <div 
@@ -89,13 +140,20 @@ export default () => {
                         className="chatWindow--input" 
                         type="text"
                         placeholder="Type a message"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
                     />
                 </div>
                 <div className="chatWindow--pos">
 
-                    <div className="chatWindow--btn">
-                        <SendIcon style={{ color: colors.icons }} />
-                    </div>
+                    {text === ''
+                        ?<div className="chatWindow--btn">
+                            <MicIcon onClick={handleMicClick} style={{ color: colors.icons }} />
+                        </div>
+                        :<div onClick={handleSendClick} className="chatWindow--btn">
+                            <SendIcon style={{ color: colors.icons }} />
+                        </div>
+                    }
 
                 </div>
 

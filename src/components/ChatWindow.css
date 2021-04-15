@@ -51,6 +51,14 @@
     background-size: 500px;
     background-position: center;
     background-image: url('https://i.pinimg.com/originals/85/ec/df/85ecdf1c3611ecc9b7fa85282d9526e0.jpg');
+    padding: 20px 30px;
+}
+.chatWindow--body::-webkit-scrollbar{
+    width: 6px;
+    height: 6px;
+}
+.chatWindow--body::-webkit-scrollbar-thumb{
+    background-color: rgba(0,0,0,0.2)
 }
 
 .chatWindow--footer{
