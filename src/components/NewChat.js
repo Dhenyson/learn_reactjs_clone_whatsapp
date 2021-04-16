@@ -30,7 +30,7 @@ export default ({user, chatlist, show, setShow}) => {
                 {list.map((item, key) => (
                     <div className="newChat--item" key={key} >
                         <img className="newChat--itemavatar" src={item.avatar} alt="" />
-                        <div className="newChat--itemname">item.name</div>
+                        <div className="newChat--itemname">{item.name}</div>
                     </div>
                 ))}
             </div>

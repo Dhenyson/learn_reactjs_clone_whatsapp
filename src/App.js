@@ -10,6 +10,8 @@ import ChatListItem from './components/ChatListItem'
 import ChatIntro from './components/ChatIntro'
 import ChatWindow from './components/ChatWindow'
 import NewChat from './components/NewChat'
+import Login from './components/Login'
+import Api from './Api'
 
 const colors = {
   icons: '#B1B3B5'
@@ -23,13 +25,23 @@ export default () => {
     {chatId: 4, title: 'Fulano de tal', image: 'https://www.w3schools.com/howto/img_avatar2.png'}
   ])
   const [activeChat, setActiveChat] = useState({})
-  const [user, setUser] = useState({
-    id: 1234,
-    avatar: 'https://www.w3schools.com/howto/img_avatar2.png',
-    name: 'Dhenyson Jhean'
-  })
+  const [user, setUser] = useState(null)
 
   const [showNewChat, setShowNewChat] = useState(false)
+
+  const handleLoginData = async (user) => {
+    let newUser = {
+      id: user.uid,
+      name: user.displayName,
+      avatar: user.photoURL
+    }
+    await Api.addUser(newUser)
+    setUser(newUser)
+  }
+
+  if(user === null){
+    return (<Login onReceiver={handleLoginData}/>)
+  }
 
   return (
     <div className="app-window">
