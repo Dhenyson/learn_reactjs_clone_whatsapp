@@ -18,14 +18,13 @@ const colors = {
 }
 
 export default () => {
-  const [chatList, setChatList] = useState([
-    {chatId: 1, title: '.', image: 'https://www.w3schools.com/howto/img_avatar2.png'},
-    {chatId: 2, title: 'Cíntia Carolayne - Namorada', image: 'https://www.w3schools.com/howto/img_avatar2.png'},
-    {chatId: 3, title: 'Michel-pizzaria', image: 'https://www.w3schools.com/howto/img_avatar2.png'},
-    {chatId: 4, title: 'Fulano de tal', image: 'https://www.w3schools.com/howto/img_avatar2.png'}
-  ])
+  const [chatList, setChatList] = useState([])
   const [activeChat, setActiveChat] = useState({})
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState({
+    id: 'tcqYBFPPeJgUuz6zxT4mG2wqdY92',
+    name: 'Dhenyson Jhean',
+    avatar: 'https://graph.facebook.com/4269726329785205/picture'
+  })
 
   const [showNewChat, setShowNewChat] = useState(false)
 
