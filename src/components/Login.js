@@ -1,20 +1,20 @@
-import './Login.css'
-import Api from '../Api'
+import React from 'react';
+import './Login.css';
+import Api from '../Api';
 
-export default ({onReceiver}) => {
-
+export default ({onReceive}) => {
     const handleFacebookLogin = async () => {
-        let result = await Api.fbPopup()
-        if(result){
-            onReceiver(result.user)
+        let result = await Api.fbPopup();
+        if(result) {
+            onReceive(result.user);
         } else {
-            alert('Error!')
+            alert("Erro!");
         }
     }
 
     return (
         <div className="login">
-            <button onClick={handleFacebookLogin}>Login</button>
+            <button onClick={handleFacebookLogin}>Logar com Facebook</button>
         </div>
-    )
+    );
 }

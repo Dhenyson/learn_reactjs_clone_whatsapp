@@ -1,7 +1,11 @@
-import EmojiPicker from 'emoji-picker-react'
-import {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import EmojiPicker from 'emoji-picker-react';
+import './ChatWindow.css';
 
-import './ChatWindow.css'
+import Api from '../Api';
+
+import MessageItem from './MessageItem';
+
 import SearchIcon from '@material-ui/icons/Search';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -9,57 +13,72 @@ import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
 import MicIcon from '@material-ui/icons/Mic';
-import Api from '../Api'
-
-import colors from '../colors'
-import MessageItem from './MessageItem'
-import { IsoRounded } from '@material-ui/icons';
 
 export default ({user, data}) => {
 
     const body = useRef();
 
-    const [emojiOpen, setEmojiOpen] = useState(false)
-    const [text, setText] = useState('')
-    const [list, setList] = useState([])
+    let recognition = null;
+    let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SpeechRecognition !== undefined) {
+        recognition = new SpeechRecognition();
+    }
+
+    const [emojiOpen, setEmojiOpen] = useState(false);
+    const [text, setText] = useState('');
+    const [listening, setListening] = useState(false);
+    const [list, setList] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(()=>{
-        let unsub = Api.onChatContent(data.chatId, setList)
-        return unsub
-    }, [data.chatId])
+        setList([]);
+        let unsub = Api.onChatContent(data.chatId, setList, setUsers);
+        return unsub;
+    }, [data.chatId]);
 
     useEffect(()=>{
-        if(body.current.scrollHeight > body.current.offsetHeight){
-            body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight
+        if(body.current.scrollHeight > body.current.offsetHeight) {
+            body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight;
         }
-    },[list])
+    }, [list]);
 
     const handleEmojiClick = (e, emojiObject) => {
-        setText( text + emojiObject.emoji)
+        setText( text + emojiObject.emoji );
     }
 
     const handleOpenEmoji = () => {
-        setEmojiOpen(true)
+        setEmojiOpen(true);
     }
-
     const handleCloseEmoji = () => {
-        setEmojiOpen(false)
+        setEmojiOpen(false);
     }
-
     const handleMicClick = () => {
-        console.log(list)    }
+        if(recognition !== null) {
 
-    const handleSendClick = () => {
-        if(text !== ''){
-            Api.sendMessage(data, user.id, 'text', text)
-            setText('')
-            setEmojiOpen(false)
+            recognition.onstart = () => {
+                setListening(true);
+            }
+            recognition.onend = () => {
+                setListening(false);
+            }
+            recognition.onresult = (e) => {
+                setText( e.results[0][0].transcript );
+            }
+
+            recognition.start();
         }
     }
 
     const handleInputKeyUp = (e) => {
-        if(e.keyCode === 13){
-            handleSendClick()
+        if(e.keyCode == 13) {
+            handleSendClick();
+        }
+    }
+    const handleSendClick = () => {
+        if(text !== '') {
+            Api.sendMessage(data, user.id, 'text', text, users);
+            setText('');
+            setEmojiOpen(false);
         }
     }
 
@@ -75,21 +94,20 @@ export default ({user, data}) => {
                 <div className="chatWindow--headerbuttons">
 
                     <div className="chatWindow--btn">
-                        <SearchIcon style={{ color: colors.icons }} />
+                        <SearchIcon style={{color: '#919191'}} />
                     </div>
                     <div className="chatWindow--btn">
-                        <AttachFileIcon style={{ color: colors.icons }} />
+                        <AttachFileIcon style={{color: '#919191'}} />
                     </div>
                     <div className="chatWindow--btn">
-                        <MoreVertIcon style={{ color: colors.icons }} />
+                        <MoreVertIcon style={{color: '#919191'}} />
                     </div>
-                    
+
                 </div>
 
             </div>
-
             <div ref={body} className="chatWindow--body">
-                {list.map((item, key) => (
+                {list.map((item, key)=>(
                     <MessageItem
                         key={key}
                         data={item}
@@ -97,53 +115,57 @@ export default ({user, data}) => {
                     />
                 ))}
             </div>
-
-            <div 
-                className="chatWindow--emojiarea" 
-                style={{height: emojiOpen ? '200px' : '0px'}}
-            >
-                <EmojiPicker 
+            
+            <div
+            className="chatWindow--emojiarea"
+            style={{height: emojiOpen ? '200px' : '0px'}}>
+                <EmojiPicker
                     onEmojiClick={handleEmojiClick}
-                    disableSearchBar 
+                    disableSearchBar
                     disableSkinTonePicker
                 />
             </div>
 
             <div className="chatWindow--footer">
-                <div className="chatWindow--pre">
 
-                    <div 
-                        className="chatWindow--btn" 
+                <div className="chatWindow--pre">
+                    
+                    <div
+                        className="chatWindow--btn"
                         onClick={handleCloseEmoji}
                         style={{width: emojiOpen?40:0}}
                     >
-                        <CloseIcon style={{ color: colors.icons }} />
+                        <CloseIcon style={{color: '#919191'}} />
                     </div>
 
-                    <div className="chatWindow--btn" onClick={handleOpenEmoji}>
-                        <InsertEmoticonIcon style={{ color: colors.icons }} />
+                    <div
+                        className="chatWindow--btn"
+                        onClick={handleOpenEmoji}
+                    >
+                        <InsertEmoticonIcon style={{color: emojiOpen?'#009688':'#919191'}} />
                     </div>
 
                 </div>
-
                 <div className="chatWindow--inputarea">
-                    <input 
-                        className="chatWindow--input" 
+                    <input
+                        className="chatWindow--input"
                         type="text"
-                        placeholder="Type a message"
+                        placeholder="Digite uma mensagem"
                         value={text}
-                        onChange={(e) => setText(e.target.value)}
+                        onChange={e=>setText(e.target.value)}
                         onKeyUp={handleInputKeyUp}
                     />
                 </div>
                 <div className="chatWindow--pos">
-
-                    {text === ''
-                        ?<div className="chatWindow--btn">
-                            <MicIcon onClick={handleMicClick} style={{ color: colors.icons }} />
+                    
+                    {text === '' &&
+                        <div onClick={handleMicClick} className="chatWindow--btn">
+                            <MicIcon style={{color: listening ? '#126ECE' : '#919191'}} />
                         </div>
-                        :<div onClick={handleSendClick} className="chatWindow--btn">
-                            <SendIcon style={{ color: colors.icons }} />
+                    }
+                    {text !== '' &&
+                        <div onClick={handleSendClick} className="chatWindow--btn">
+                            <SendIcon style={{color: '#919191'}} />
                         </div>
                     }
 
@@ -151,5 +173,5 @@ export default ({user, data}) => {
 
             </div>
         </div>
-    )
+    );
 }
