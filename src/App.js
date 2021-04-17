@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './App.css';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
@@ -27,6 +27,13 @@ export default () => {
   })
 
   const [showNewChat, setShowNewChat] = useState(false)
+
+  useEffect(() => {
+    if(user !== null){
+      let unsub = Api.onChatList(user.id, setChatList)
+      return unsub
+    }
+  }, [user])
 
   const handleLoginData = async (user) => {
     let newUser = {
@@ -82,7 +89,7 @@ export default () => {
       </div>
       <div className="contentarea">
         {activeChat.chatId !== undefined
-          ?<ChatWindow user={user}/>
+          ?<ChatWindow user={user} data={activeChat}/>
           :<ChatIntro />
         }
       </div>

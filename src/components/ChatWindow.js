@@ -9,42 +9,24 @@ import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
 import MicIcon from '@material-ui/icons/Mic';
+import Api from '../Api'
 
 import colors from '../colors'
 import MessageItem from './MessageItem'
+import { IsoRounded } from '@material-ui/icons';
 
-export default ({user}) => {
+export default ({user, data}) => {
 
     const body = useRef();
 
     const [emojiOpen, setEmojiOpen] = useState(false)
     const [text, setText] = useState('')
-    const [list, setList] = useState([
-        {author: 123, body:'Testando mensagem', date:"18:30"},
-        {author: 1234, body:'eu', date:"18:45"},
-        {author: 1234, body:'aqui', date:"18:48"},
-        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
-        {author: 123, body:'Testando mensagem', date:"18:30"},
-        {author: 1234, body:'eu', date:"18:45"},
-        {author: 1234, body:'aqui', date:"18:48"},
-        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
-        {author: 123, body:'Testando mensagem', date:"18:30"},
-        {author: 1234, body:'eu', date:"18:45"},
-        {author: 1234, body:'aqui', date:"18:48"},
-        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
-        {author: 123, body:'Testando mensagem', date:"18:30"},
-        {author: 1234, body:'eu', date:"18:45"},
-        {author: 1234, body:'aqui', date:"18:48"},
-        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
-        {author: 123, body:'Testando mensagem', date:"18:30"},
-        {author: 1234, body:'eu', date:"18:45"},
-        {author: 1234, body:'aqui', date:"18:48"},
-        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
-        {author: 123, body:'Testando mensagem', date:"18:30"},
-        {author: 1234, body:'eu', date:"18:45"},
-        {author: 1234, body:'aqui', date:"18:48"},
-        {author: 123, body:'Testando mensagem de novo', date:"18:52"},
-    ])
+    const [list, setList] = useState([])
+
+    useEffect(()=>{
+        let unsub = Api.onChatContent(data.chatId, setList)
+        return unsub
+    }, [data.chatId])
 
     useEffect(()=>{
         if(body.current.scrollHeight > body.current.offsetHeight){
@@ -65,11 +47,20 @@ export default ({user}) => {
     }
 
     const handleMicClick = () => {
-
-    }
+        console.log(list)    }
 
     const handleSendClick = () => {
+        if(text !== ''){
+            Api.sendMessage(data, user.id, 'text', text)
+            setText('')
+            setEmojiOpen(false)
+        }
+    }
 
+    const handleInputKeyUp = (e) => {
+        if(e.keyCode === 13){
+            handleSendClick()
+        }
     }
 
     return (
@@ -77,8 +68,8 @@ export default ({user}) => {
             <div className="chatWindow--header">
 
                 <div className="chatWindow--headerinfo">
-                    <img className="chatWindow--avatar" src="https://www.w3schools.com/howto/img_avatar2.png" alt="" />
-                    <div className="chatWindow--name">Dhenyon Jhean</div>
+                    <img className="chatWindow--avatar" src={data.image} alt="" />
+                    <div className="chatWindow--name">{data.title}</div>
                 </div>
 
                 <div className="chatWindow--headerbuttons">
@@ -142,6 +133,7 @@ export default ({user}) => {
                         placeholder="Type a message"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
+                        onKeyUp={handleInputKeyUp}
                     />
                 </div>
                 <div className="chatWindow--pos">
